@@ -37,7 +37,7 @@ class ofxOpticalFlowFarneback {
 		void update(ofVideoPlayer& source);
 		void update(ofVideoGrabber& source);
 		void update(unsigned char* pixels, int width, int height, int imageType);
-		void update(IplImage* previousImage, IplImage* currentImage);
+        void update(IplImage* previousImage, IplImage* currentImage);
 		
 		ofPoint getVelAtNorm(float x, float y);
 		ofPoint getVelAtPixel(int x, int y);

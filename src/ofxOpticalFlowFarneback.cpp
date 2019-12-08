@@ -127,7 +127,7 @@ void ofxOpticalFlowFarneback::update(unsigned char* pixels, int width, int heigh
 			greyImgSml.setFromColorImage(colrImgSml);
 		}
 		else if(imageType == OF_IMAGE_GRAYSCALE) {
-			greyImgSml.setFromPixels(pixels, sizeSml.width, sizeSml.height);
+            greyImgSml.setFromPixels(pixels, sizeSml.width, sizeSml.height);
 		}
 		else {
 			return;		// wrong image type.
@@ -168,17 +168,17 @@ void ofxOpticalFlowFarneback::update(unsigned char* pixels, int width, int heigh
 		greyImgSml.mirror(bMirrorV, bMirrorH);
 	}
 
-	update(greyImgPrv.getCvImage(), greyImgSml.getCvImage());
+    update(greyImgPrv.getCvImage(), greyImgSml.getCvImage());
 	greyImgPrv = greyImgSml;
 }
 
 void ofxOpticalFlowFarneback::update(IplImage * previousImage, IplImage * currentImage) {
-	if((previousImage->width != currentImage->width) || (previousImage->height != currentImage->height)) {
+    if((previousImage->width != currentImage->width) || (previousImage->height != currentImage->height)) {
 		return; // images do not match.
 	}
 
-	int w = currentImage->width;
-	int h = currentImage->height;
+    int w = currentImage->width;
+    int h = currentImage->height;
 
 	if(flow) {
 		if((flow->width != w) || (flow->height != h)) {
@@ -194,7 +194,14 @@ void ofxOpticalFlowFarneback::update(IplImage * previousImage, IplImage * curren
 	if(flowFeedback) flags |= cv::OPTFLOW_USE_INITIAL_FLOW;
 	if(gaussianFiltering) flags |= cv::OPTFLOW_FARNEBACK_GAUSSIAN;
 
-	cvCalcOpticalFlowFarneback(previousImage, currentImage, flow, pyr_scale, levels, winsize, iterations, poly_n, poly_sigma, flags);
+    // cv::cvCalcOptical
+
+//    cv::InputArray input(previousImage);
+//    cv::calcOpticalFlowPyrLK(previousImage, currentImage, image[0], image[1], output[0], cvSize(opFlowSize, opFlowSize);
+    cv::Mat tprev = cv::cvarrToMat(previousImage);
+    cv::Mat tcrr = cv::cvarrToMat(currentImage);
+    cv::Mat tFlow = cv::cvarrToMat(flow);
+    cv::calcOpticalFlowFarneback(tprev, tcrr, tFlow, pyr_scale, levels, winsize, iterations, poly_n, poly_sigma, flags);
 }
 
 ///////////////////////////////////////////
